@@ -1,0 +1,36 @@
+# deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-hello-world
+  labels:
+    app: flask-hello-world
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask-hello-world
+  template:
+    metadata:
+      labels:
+        app: flask-hello-world
+    spec:
+      containers:
+        - name: flask-container
+          image: 'image-registry.apps.cluster-vk4bt.dynamic.redhatworkshops.io/web-uat/flask-hello-world:latest'
+          ports:
+            - containerPort: 8080
+          imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-service
+spec:
+  selector:
+    app: flask-hello-world
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: ClusterIP
