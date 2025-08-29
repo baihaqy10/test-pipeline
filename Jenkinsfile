@@ -34,7 +34,7 @@ spec:
             steps {
                 container('builder') {
                     withCredentials([string(credentialsId: 'OCP_TOKEN', variable: 'OCP_TOKEN')]) {
-                        sh 'oc login --token=${OCP_TOKEN} --server=https://api.cluster-vk4bt.dynamic.redhatworkshops.io:6443'
+                        sh 'oc login --token=${OCP_TOKEN} --server=https://api.cluster-vk4bt.dynamic.redhatworkshops.io:6443 --insecure-skip-tls-verify'
                         sh 'oc project web-uat'
                         sh 'oc apply -f deployment.yaml'
                     }
