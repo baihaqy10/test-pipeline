@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: flask-hello-world
+  name: tet
   labels:
     app: flask-hello-world
 spec:
@@ -19,7 +19,7 @@ spec:
         - name: flask-container
           image: 'image-registry.apps.cluster-vk4bt.dynamic.redhatworkshops.io/web-uat/flask-hello-world:latest'
           ports:
-            - containerPort: 8080
+            - containerPort: 3000
           imagePullPolicy: Always
 ---
 apiVersion: v1
