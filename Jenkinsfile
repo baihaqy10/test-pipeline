@@ -7,7 +7,7 @@ kind: Pod
 spec:
   containers:
   - name: builder
-    image: 'image-registry.apps.cluster-vk4bt.dynamic.redhatworkshops.io/web-uat/jenkins-builder:latest'
+    image: 'image-registry.apps.cluster-vk4bt.dynamic.redhatworkshops.io/jenkins/jenkins-builder:latest'
     command: ['/bin/cat']
     tty: true
   - name: dind
