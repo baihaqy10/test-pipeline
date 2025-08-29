@@ -22,8 +22,8 @@ spec:
             steps {
                 container('dind') {
                     sh 'docker build -t my-web-app:latest .'
-                    sh 'docker tag my-web-app:latest image-registry.apps.cluster-vk4bt.dynamic.redhatworkshops.io/web-uat/my-web-app:latest'
-                    sh 'docker push image-registry.apps.cluster-vk4bt.dynamic.redhatworkshops.io/web-uat/my-web-app:latest'
+                    sh 'docker tag my-web-app:latest default-route-openshift-image-registry.apps.cluster-vk4bt.dynamic.redhatworkshops.io/web-uat/my-web-app:latest'
+                    sh 'docker push default-route-openshift-image-registry.apps.cluster-vk4bt.dynamic.redhatworkshops.io/web-uat/my-web-app:latest'
                 }
             }
         }
