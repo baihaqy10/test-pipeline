@@ -7,7 +7,7 @@ kind: Pod
 spec:
   containers:
   - name: builder
-    image: 'jenkins/jnlp-slave:latest' # Pulling from Docker Hub
+    image: 'jenkins/jnlp-slave:latest'
     command: ['/bin/cat']
     tty: true
   - name: dind
@@ -21,11 +21,14 @@ spec:
         stage('Build Image') {
             steps {
                 container('dind') {
-                    sh 'docker build -t my-web-app:latest .'
-                    sh 'docker tag my-web-app:latest default-route-openshift-image-registry.apps.cluster-vk4bt.dynamic.redhatworkshops.io/web-uat/my-web-app:latest'
-                    sh 'export secret_registry=tVG0ohOeazwPmvsF'
-                    sh 'docker login -u admin -p $secret_registry default-route-openshift-image-registry.apps.cluster-vk4bt.dynamic.redhatworkshops.io'
-                    sh 'docker push default-route-openshift-image-registry.apps.cluster-vk4bt.dynamic.redhatworkshops.io/web-uat/my-web-app:latest'
+                    // Use withCredentials to securely inject the token
+                    withCredentials([string(credentialsId: 'OCP_TOKEN', variable: 'OCP_TOKEN')]) {
+                        // The 'admin' user is the username, the token is the password
+                        sh "docker login -u admin -p ${OCP_TOKEN} default-route-openshift-image-registry.apps.cluster-vk4bt.dynamic.redhatworkshops.io"
+                        sh 'docker build -t my-web-app:latest .'
+                        sh 'docker tag my-web-app:latest default-route-openshift-image-registry.apps.cluster-vk4bt.dynamic.redhatworkshops.io/web-uat/my-web-app:latest'
+                        sh 'docker push default-route-openshift-image-registry.apps.cluster-vk4bt.dynamic.redhatworkshops.io/web-uat/my-web-app:latest'
+                    }
                 }
             }
         }
