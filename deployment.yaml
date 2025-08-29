@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: tet
+  name: flask
   labels:
     app: flask-hello-world
 spec:
@@ -19,7 +19,7 @@ spec:
         - name: flask-container
           image: 'image-registry.openshift-image-registry.svc:5000/web-uat/my-web-app:latest'
           ports:
-            - containerPort: 8080
+            - containerPort: 3000
           imagePullPolicy: Always
 ---
 apiVersion: v1
@@ -32,5 +32,5 @@ spec:
   ports:
     - protocol: TCP
       port: 8080
-      targetPort: 8080
+      targetPort: 3000
   type: ClusterIP
