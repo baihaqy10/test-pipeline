@@ -7,7 +7,7 @@ kind: Pod
 spec:
   containers:
   - name: builder
-    image: 'default-route-openshift-image-registry.apps.cluster-vk4bt.dynamic.redhatworkshops.io/jenkins/jnlp-slave:latest'
+    image: 'openshift4/ose-cli:latest'
     command: ['/bin/cat']
     tty: true
   - name: dind
