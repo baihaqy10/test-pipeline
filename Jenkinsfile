@@ -21,9 +21,7 @@ spec:
         stage('Build') {
             steps {
                 container('dind') {
-                    // Use withCredentials to securely inject the token
                     withCredentials([string(credentialsId: 'OCP_TOKEN', variable: 'OCP_TOKEN')]) {
-                        // The 'admin' user is the username, the token is the password
                         sh "docker login -u admin -p ${OCP_TOKEN} default-route-openshift-image-registry.apps.cluster-vk4bt.dynamic.redhatworkshops.io"
                         sh 'docker build -t my-web-app:latest .'
                         sh 'docker tag my-web-app:latest default-route-openshift-image-registry.apps.cluster-vk4bt.dynamic.redhatworkshops.io/web-uat/my-web-app:latest'
@@ -34,11 +32,12 @@ spec:
         }
         stage('Deploy') {
             steps {
-                 // Use withCredentials to securely inject the token
+                container('builder') {
                     withCredentials([string(credentialsId: 'OCP_TOKEN', variable: 'OCP_TOKEN')]) {
-                        // The 'admin' user is the username, the token is the password
-                        sh 'oc login -u admin -p ${OCP_TOKEN} https://api.cluster-vk4bt.dynamic.redhatworkshops.io:6443'
-                        sh 'oc apply -f deployment.yaml -n web-uat'
+                        sh 'oc login --token=${OCP_TOKEN} --server=https://api.cluster-vk4bt.dynamic.redhatworkshops.io:6443'
+                        sh 'oc project web-uat'
+                        sh 'oc apply -f deployment.yaml'
+                    }
                 }
             }
         }
