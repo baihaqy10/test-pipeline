@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: flask-container
-          image: 'default-route-openshift-image-registry.apps.cluster-vk4bt.dynamic.redhatworkshops.io/web-uat/flask-hello-world:latest'
+          image: 'image-registry.openshift-image-registry.svc:5000/web-uat/flask-hello-world:latest'
           ports:
             - containerPort: 3000
           imagePullPolicy: Always
