@@ -1,21 +1,19 @@
-# Dockerfile
-# Gunakan image base Python resmi
-FROM python:3.9-slim
+FROM node:18-alpine
 
-# Set working directory di dalam container
+# Buat direktori kerja di dalam container
 WORKDIR /app
 
-# Salin file requirements.txt ke container
-COPY requirements.txt .
+# Salin package.json dan package-lock.json
+COPY package*.json ./
 
-# Instal dependensi yang diperlukan
-RUN pip install --no-cache-dir -r requirements.txt
+# Instal dependensi
+RUN npm install
 
-# Salin semua file kode aplikasi ke container
+# Salin sisa kode aplikasi
 COPY . .
 
-# Definisikan port yang akan diekspos oleh container
-EXPOSE 8080
+# Ekspos port 3000
+EXPOSE 3000
 
-# Jalankan aplikasi saat container di-run
-CMD ["python", "app.py"]
+# Jalankan aplikasi saat container dimulai
+CMD ["npm", "start"]
