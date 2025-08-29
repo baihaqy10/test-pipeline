@@ -7,14 +7,13 @@ kind: Pod
 spec:
   containers:
   - name: builder
-    image:  'jenkins/jnlp-slave:latest' // Pulling from Docker Hub
+    image: 'jenkins/jnlp-slave:latest' # Pulling from Docker Hub
     command: ['/bin/cat']
     tty: true
   - name: dind
     image: 'docker:dind'
     securityContext:
       privileged: true
-    args: ['--storage-driver=overlay2']
 '''
         }
     }
