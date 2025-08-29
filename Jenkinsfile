@@ -25,7 +25,7 @@ pipeline {
                 container('dind') {
                     // Commands for building the Docker image
                     sh 'docker build -t my-web-app:latest .'
-                    sh 'docker tag my-web-app:latest image-registry.apps.cluster-vk4bt.dynamic.redhatworkshops.io/web-uatmy-web-app:latest'
+                    sh 'docker tag my-web-app:latest image-registry.apps.cluster-vk4bt.dynamic.redhatworkshops.io/web-uat/my-web-app:latest'
                     sh 'docker push image-registry.apps.cluster-vk4bt.dynamic.redhatworkshops.io/web-uat/my-web-app:latest'
                 }
             }
