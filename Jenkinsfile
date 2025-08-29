@@ -23,7 +23,7 @@ spec:
                 container('dind') {
                     sh 'docker build -t my-web-app:latest .'
                     sh 'docker tag my-web-app:latest default-route-openshift-image-registry.apps.cluster-vk4bt.dynamic.redhatworkshops.io/web-uat/my-web-app:latest'
-                    sh 'docker login -u admin -p $(oc whoami -t) default-route-openshift-image-registry.apps.cluster-vk4bt.dynamic.redhatworkshops.io'
+                    sh 'docker login -u admin -p tVG0ohOeazwPmvsF default-route-openshift-image-registry.apps.cluster-vk4bt.dynamic.redhatworkshops.io'
                     sh 'docker push default-route-openshift-image-registry.apps.cluster-vk4bt.dynamic.redhatworkshops.io/web-uat/my-web-app:latest'
                 }
             }
