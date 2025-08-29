@@ -7,7 +7,7 @@ kind: Pod
 spec:
   containers:
   - name: builder
-    image: 'openshift4/ose-cli:latest'
+    image: 'image-registry.openshift-image-registry.svc:5000/openshift/cli'
     command: ['/bin/cat']
     tty: true
   - name: dind
