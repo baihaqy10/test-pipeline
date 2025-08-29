@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: flask-container
-          image: 'image-registry.openshift-image-registry.svc:5000/web-uat/flask-hello-world:latest'
+          image: 'image-registry.openshift-image-registry.svc:5000/web-uat/my-web-app:latest:latest'
           ports:
             - containerPort: 3000
           imagePullPolicy: Always
