@@ -7,7 +7,7 @@ kind: Pod
 spec:
   containers:
   - name: builder
-    image: 'jenkins-builder:latest'
+    image:  'jenkins/jnlp-slave:latest' // Pulling from Docker Hub
     command: ['/bin/cat']
     tty: true
   - name: dind
