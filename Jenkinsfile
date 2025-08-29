@@ -22,10 +22,10 @@ spec:
             steps {
                 container('dind') {
                     withCredentials([string(credentialsId: 'OCP_TOKEN', variable: 'OCP_TOKEN')]) {
-                        sh "docker login -u admin -p ${OCP_TOKEN} image-registry.openshift-image-registry.svc:5000 --tls-verify=false"
+                        sh "docker login -u admin -p ${OCP_TOKEN} default-route-openshift-image-registry.apps.cluster-vk4bt.dynamic.redhatworkshops.io"
                         sh 'docker build -t my-web-app:latest .'
-                        sh 'docker tag my-web-app:latest image-registry.openshift-image-registry.svc:5000/web-uat/my-web-app:latest'
-                        sh 'docker push image-registry.openshift-image-registry.svc:5000/web-uat/my-web-app:latest'
+                        sh 'docker tag my-web-app:latest default-route-openshift-image-registry.apps.cluster-vk4bt.dynamic.redhatworkshops.io/web-uat/my-web-app:latest'
+                        sh 'docker push default-route-openshift-image-registry.apps.cluster-vk4bt.dynamic.redhatworkshops.io/web-uat/my-web-app:latest'
                     }
                 }
             }
