@@ -18,7 +18,7 @@ spec:
         }
     }
     stages {
-        stage('Build Image') {
+        stage('Build') {
             steps {
                 container('dind') {
                     // Use withCredentials to securely inject the token
@@ -32,10 +32,13 @@ spec:
                 }
             }
         }
-        stage('Deploy to OCP') {
+        stage('Deploy') {
             steps {
-                container('builder') {
-                    sh 'oc apply -f deployment.yaml -n web-uat'
+                 // Use withCredentials to securely inject the token
+                    withCredentials([string(credentialsId: 'OCP_TOKEN', variable: 'OCP_TOKEN')]) {
+                        // The 'admin' user is the username, the token is the password
+                        sh 'oc login -u admin -p ${OCP_TOKEN} https://api.cluster-vk4bt.dynamic.redhatworkshops.io:6443'
+                        sh 'oc apply -f deployment.yaml -n web-uat'
                 }
             }
         }
