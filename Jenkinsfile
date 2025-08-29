@@ -35,7 +35,7 @@ spec:
         stage('Deploy to OCP') {
             steps {
                 container('builder') {
-                    sh 'oc apply -f deployment.yaml'
+                    sh 'oc apply -f deployment.yaml -n web-uat'
                 }
             }
         }
