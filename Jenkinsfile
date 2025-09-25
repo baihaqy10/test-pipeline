@@ -1,5 +1,9 @@
 pipeline {
     agent {
+        environment {
+            PROJECT_NAME = "first-project"
+            SERVICE_NAME = "first-app"
+        }
         kubernetes {
             yaml '''
 apiVersion: v1
@@ -23,7 +27,7 @@ spec:
                 container('dind') {
                     withCredentials([string(credentialsId: 'OCP_TOKEN', variable: 'OCP_TOKEN')]) {
                         sh "docker login -u admin -p ${OCP_TOKEN} ${NEXUS_URL}"
-                        sh 'docker build -t my-web-app:latest .'
+                        sh 'docker build -t ${NEXUS_URL_HOSTED}/${NEXUS_PROJECT}/${NEXUS_SERVICE}:latest .'
                         sh 'docker tag my-web-app:latest ${NEXUS_URL}/web-uat/my-web-app:latest'
                         sh 'docker push ${NEXUS_URL}/web-uat/my-web-app:latest'
                     }
