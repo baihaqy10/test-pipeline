@@ -25,13 +25,21 @@ spec:
         stage('Build') {
             steps {
                 container('dind') {
-                    withCredentials([string(credentialsId: 'OCP_TOKEN', variable: 'OCP_TOKEN')]) {
-                        sh "docker login -u admin -p ${OCP_TOKEN} ${NEXUS_URL}"
-                        sh 'docker build -t ${NEXUS_URL_HOSTED}/${NEXUS_PROJECT}/${NEXUS_SERVICE}:latest .'
-                        sh 'docker tag my-web-app:latest ${NEXUS_URL}/web-uat/my-web-app:latest'
-                        sh 'docker push ${NEXUS_URL}/web-uat/my-web-app:latest'
+                    #withCredentials([string(credentialsId: 'OCP_TOKEN', variable: 'OCP_TOKEN')])
+                    withCredentials([string(credentialsId: 'nexus-hosted', variable: 'NEXUS_HOSTED')])
+                    withCredentials([string(credentialsId: 'nexus-secret', 
+                    usernameVariable: "NEXUS_USERNAME",
+                    passwordVariable: "NEXUS_PASSWORD")]) {
+                        sh "docker login -u ${NEXUS_USERNAME} -p ${NEXUS_PASSWORD} ${NEXUS_HOSTED}"
+                        sh 'docker build -t ${NEXUS_HOSTED}/${NEXUS_PROJECT}/${NEXUS_SERVICE}:latest .'
+                        sh 'docker push ${NEXUS_HOSTED}/${NEXUS_PROJECT}/${NEXUS_SERVICE}:latest'
                     }
                 }
+            }
+        }
+        stage('Release') {
+            steps {
+                container()
             }
         }
         stage('Deploy') {
