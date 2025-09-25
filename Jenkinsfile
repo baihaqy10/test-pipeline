@@ -22,10 +22,10 @@ spec:
             steps {
                 container('dind') {
                     withCredentials([string(credentialsId: 'OCP_TOKEN', variable: 'OCP_TOKEN')]) {
-                        sh "docker login -u admin -p ${OCP_TOKEN} default-route-openshift-image-registry.apps.cluster-vk4bt.dynamic.redhatworkshops.io"
+                        sh "docker login -u admin -p ${OCP_TOKEN} ${NEXUS_URL}"
                         sh 'docker build -t my-web-app:latest .'
-                        sh 'docker tag my-web-app:latest default-route-openshift-image-registry.apps.cluster-vk4bt.dynamic.redhatworkshops.io/web-uat/my-web-app:latest'
-                        sh 'docker push default-route-openshift-image-registry.apps.cluster-vk4bt.dynamic.redhatworkshops.io/web-uat/my-web-app:latest'
+                        sh 'docker tag my-web-app:latest ${NEXUS_URL}/web-uat/my-web-app:latest'
+                        sh 'docker push ${NEXUS_URL}/web-uat/my-web-app:latest'
                     }
                 }
             }
@@ -34,7 +34,7 @@ spec:
             steps {
                 container('builder') {
                     withCredentials([string(credentialsId: 'OCP_TOKEN', variable: 'OCP_TOKEN')]) {
-                        sh 'oc login --token=${OCP_TOKEN} --server=https://api.cluster-vk4bt.dynamic.redhatworkshops.io:6443 --insecure-skip-tls-verify'
+                        sh 'oc login --token=${OCP_TOKEN} --server=${API_OCP} --insecure-skip-tls-verify'
                         sh 'oc project web-uat'
                         sh 'oc apply -f deployment.yaml'
                     }
