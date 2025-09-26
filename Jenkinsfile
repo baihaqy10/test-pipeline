@@ -36,8 +36,11 @@ spec:
             steps('Project Check'){
                 container('builder'){
                     sh 'oc login -u admin -p ${OCP_PASSWORD} --server=${API_OCP} --insecure-skip-tls-verify'
-                    sh 'oc create namespace ${PROJECT_NAME}'
                     sh 'oc project ${PROJECT_NAME}'
+                    def projectExist = sh(script: "oc get projects | grep -q ${PROJECT_NAME}", returnStdout: true).trim().isEmpty()
+                    if (projectExist) {
+                        sh 'oc create namespace ${PROJECT_NAME}'
+                    }
                 }
             }
         }
