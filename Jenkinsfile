@@ -53,9 +53,8 @@ spec:
                 container('builder') {
                     sh 'helm repo add stable https://charts.helm.sh/stable'
                     sh 'helm repo update'
-                    sh 'helm install my-release --set image.repository=${OCP_REG}/${PROJECT_NAME}/${SERVICE_NAME} --set image.tag=latest stable/my-chart'
+                    sh 'helm install my-release --set image.repository=${OCP_REG}/${PROJECT_NAME}/${SERVICE_NAME} --set image.tag=latest stable'
                 }
-            }
             }
         }
     }
