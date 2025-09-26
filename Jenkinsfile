@@ -1,5 +1,22 @@
 pipeline {
-    agent any
+    agent {
+        kubernetes {
+            yaml '''
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+  - name: builder
+    image: 'image-registry.openshift-image-registry.svc:5000/openshift/cli'
+    command: ['/bin/cat']
+    tty: true
+  - name: dind
+    image: 'docker:dind'
+    securityContext:
+      privileged: true
+'''
+        }
+    }
     environment {
         PROJECT_NAME = "first-project"
         SERVICE_NAME = "first-service"
