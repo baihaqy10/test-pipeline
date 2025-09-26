@@ -1,0 +1,30 @@
+deployment:
+  replicas: 1
+  env:
+    app: first-service
+  resources:
+    requests:
+      cpu: 100m
+      memory: 1000Mi
+    limits:
+      cpu: 200m
+      memory: 2000Mi
+
+router:
+  useDefaultRoute: false
+  http:
+    - match:
+      - uri:
+          prefix: /test/
+      reqrite:
+        uri: /
+      route:
+        - destination:
+          host: first-service
+          port:
+            number: 8080
+
+services:
+  name: first-service
+  env:
+    app: first-service
