@@ -20,8 +20,8 @@ spec:
     environment {
         PROJECT_NAME = "first-project"
         SERVICE_NAME = "first-service"
-        OCP_USERNAME = "OCP-CRED"
-        OCP_PASSWORD = "OCP-CRED"
+        OCP_USERNAME = credentials('OCP-CRED')
+        OCP_PASSWORD = credentials('OCP-CRED')
     }
     stages {
         stage('Build') {
