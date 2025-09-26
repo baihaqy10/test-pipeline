@@ -31,8 +31,10 @@ spec:
                             credentialsId: 'nexus-secret', 
                             usernameVariable: "NEXUS_USERNAME",
                             passwordVariable: "NEXUS_PASSWORD")]) {
-                                sh "docker login -u ${NEXUS_USERNAME} --password-stdin ${NEXUS_PASSWORD} ${NEXUS_GROUP}"
-                                sh "docker login -u ${NEXUS_USERNAME} --password-stdin ${NEXUS_PASSWORD} ${NEXUS_HOSTED}"
+                                env.NEXUS_USER = 'admin'
+                                env.NEXUS_PASS = 'nexusabc'
+                                sh "docker login -u ${NEXUS_USERN} -p ${NEXUS_PASS} ${NEXUS_GROUP}"
+                                sh "docker login -u ${NEXUS_USER} -p ${NEXUS_PASS} ${NEXUS_HOSTED}"
                                 sh "docker build -t ${NEXUS_HOSTED}/${PROJECT_NAME}/${SERVICE_NAME}:latest ."
                                 sh "docker push ${NEXUS_HOSTED}/${PROJECT_NAME}/${SERVICE_NAME}:latest"
                             }
