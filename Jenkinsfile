@@ -25,19 +25,7 @@ spec:
         stage('Build') {
             steps {
                 container('dind') {
-                    withCredentials([string(credentialsId: 'nexus-hosted', variable: 'NEXUS_HOSTED')]) {
-                        withCredentials([string(credentialsId: 'nexus-group', variable: 'NEXUS_GROUP')]) {
-                            withCredentials([usernamePassword(
-                            credentialsId: 'nexus-secret', 
-                            usernameVariable: "NEXUS_USERNAME",
-                            passwordVariable: "NEXUS_PASSWORD")]) {
-                                env.NEXUS_USER = 'admin'
-                                env.NEXUS_PASS = 'nexusabc'
-                                sh "docker login -u ${env.NEXUS_USER} -p ${env.NEXUS_PASS} ${NEXUS_GROUP}"
-                                sh "docker login -u ${env.NEXUS_USER} -p ${envNEXUS_PASS} ${NEXUS_HOSTED}"
-                                sh "docker build -t ${NEXUS_HOSTED}/${PROJECT_NAME}/${SERVICE_NAME}:latest ."
-                                sh "docker push ${NEXUS_HOSTED}/${PROJECT_NAME}/${SERVICE_NAME}:latest"
-                            }
+                    sh "docker build -t ${NEXUS_HOSTED}/${PROJECT_NAME}/${SERVICE_NAME}:latest ."
                         }
                     }
                 }
@@ -45,13 +33,14 @@ spec:
         }
         stage('Release') {
             steps {
-                container('builde') {
+                container('builder') {
                     withCredentials([string(credentialsId: 'OCP-CRED',
                     usernameVariable: "OCP_USERNAME",
                     passwordVariable: "OCP_PASSWORD")]) {
-                        sh 'oc login --token=${OCP_TOKEN} --server=${API_OCP} --insecure-skip-tls-verify'
-                        sh 'oc login --token=${OCP_TOKEN} --server=${API_OCP} --insecure-skip-tls-verify'
-                        sh 'oc login --token=${OCP_TOKEN} --server=${API_OCP} --insecure-skip-tls-verify'
+                        withCredentials([string(credentialsId: 'ocp-api', variable: 'API_OCP')]){
+                            sh 'oc login -u ${OCP_USERNAME} -p ${OCP_PASSWORD} --server=${API_OCP} --insecure-skip-tls-verify'
+                            SH 'oc get pod -n jenkins'
+                        }
                     }                    
                 }
             }
@@ -60,9 +49,11 @@ spec:
             steps {
                 container('builder') {
                     withCredentials([string(credentialsId: 'OCP_TOKEN', variable: 'OCP_TOKEN')]) {
-                        sh 'oc login --token=${OCP_TOKEN} --server=${API_OCP} --insecure-skip-tls-verify'
-                        sh 'oc project web-uat'
-                        sh 'oc apply -f deployment.yaml'
+                        withCredentials([string(credentialsId: 'ocp-api', variable: 'API_OCP')]) {
+                            sh 'oc login --token=${OCP_TOKEN} --server=${API_OCP} --insecure-skip-tls-verify'
+                            sh 'oc project web-uat'
+                            sh 'oc apply -f deployment.yaml'
+                        }
                     }
                 }
             }
