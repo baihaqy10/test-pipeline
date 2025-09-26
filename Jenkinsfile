@@ -1,9 +1,4 @@
 pipeline {
-    agent none
-    environment {
-        PROJECT_NAME = "first-project"
-        SERVICE_NAME = "first-service"
-    }
     agent {
         kubernetes {
             yaml '''
@@ -21,6 +16,10 @@ spec:
       privileged: true
 '''
         }
+    }
+    environment {
+        PROJECT_NAME = "first-project"
+        SERVICE_NAME = "first-service"
     }
     stages {
         stage('Build') {
