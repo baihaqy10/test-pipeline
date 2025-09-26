@@ -14,6 +14,9 @@ spec:
     image: 'docker:dind'
     securityContext:
       privileged: true
+  - name: helm
+    image: 'helm:latest
+    command: ['/bin/cat']
 '''
         }
     }
@@ -49,4 +52,3 @@ spec:
             }
         }
     }
-}
