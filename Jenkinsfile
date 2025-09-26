@@ -43,7 +43,7 @@ spec:
         stage('Release'){
             steps('Push OCP Registry') {
                 container('dind'){
-                    sh 'docker login -u admin -p ${OCP_PASSWORD} ${OCP_REG}'
+                    sh 'docker login -u admin -p ${OCP_PASSWORD} ${OCP_REG} --insecure-skip-tls-verify'
                     sh 'docker push ${OCP_REG}/${PROJECT_NAME}/${SERVICE_NAME}:latest'
                 }
             }
