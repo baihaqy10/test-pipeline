@@ -25,7 +25,7 @@ spec:
         stage('Build') {
             steps {
                 container('dind') {
-                    sh "docker build -t ${NEXUS_HOSTED}/${PROJECT_NAME}/${SERVICE_NAME}:latest ."
+                    sh "docker build -t ${PROJECT_NAME}/${SERVICE_NAME}:latest ."
                         }
                     }
                 }
@@ -40,6 +40,8 @@ spec:
                         withCredentials([string(credentialsId: 'ocp-api', variable: 'API_OCP')]){
                             sh 'oc login -u ${OCP_USERNAME} -p ${OCP_PASSWORD} --server=${API_OCP} --insecure-skip-tls-verify'
                             sh 'oc get pod -n jenkins'
+                            sh 'oc create project ${PROJECT_NAME}'
+                            sh 'oc project ${PROJECT_NAME}'
                         }
                     }                    
                 }
