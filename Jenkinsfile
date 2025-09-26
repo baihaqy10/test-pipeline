@@ -33,7 +33,7 @@ spec:
             }
         }
         stage('App Manifest'){
-            steps('Project Check'){
+            steps {
                 container('builder'){
                     sh 'oc login -u admin -p ${OCP_PASSWORD} --server=${API_OCP} --insecure-skip-tls-verify'
                     sh 'oc project ${PROJECT_NAME}'
