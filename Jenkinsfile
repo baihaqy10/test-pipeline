@@ -15,7 +15,7 @@ spec:
     command: ['/bin/cat']
     tty: true
   - name: dind
-    image: 'docker:dind'
+    image: 'docker:24-cli'
     securityContext:
       privileged: true
 '''
