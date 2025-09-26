@@ -43,7 +43,6 @@ spec:
                     }
                 }
             }
-        }
         stage('Release'){
             steps('Push OCP Registry') {
                 container('dind'){
