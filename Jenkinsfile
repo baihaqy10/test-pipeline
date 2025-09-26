@@ -20,8 +20,7 @@ spec:
     environment {
         PROJECT_NAME = "first-project"
         SERVICE_NAME = "first-service"
-        OCP_USERNAME = credentials('OCP-CRED')
-        OCP_PASSWORD = credentials('OCP-CRED')
+        OCP_PASSWORD = credentials('admin-cres')
         API_OCP = credentials('ocp-api')
     }
     stages {
@@ -35,7 +34,7 @@ spec:
         stage('App Manifest'){
             steps('Project Check'){
                 container('builder'){
-                    sh 'oc login -u ${OCP_USERNAME} -p ${OCP_PASSWORD} --server=${API_OCP} --insecure-skip-tls-verify'
+                    sh 'oc login -u admin -p ${OCP_PASSWORD} --server=${API_OCP} --insecure-skip-tls-verify'
                     sh 'oc create project ${PROJECT_NAME}'
                     sh 'oc project ${PROJECT_NAME}'
                 }
