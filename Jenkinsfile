@@ -22,12 +22,13 @@ spec:
         SERVICE_NAME = "first-service"
         OCP_PASSWORD = credentials('admin-cres')
         API_OCP = credentials('ocp-api')
+        OCP_REG = credentials('ocp-registry')
     }
     stages {
         stage('Build') {
             steps('Docker Build') {
                 container('dind') {
-                    sh 'docker build -t ${PROJECT_NAME}/${SERVICE_NAME}:latest .'
+                    sh 'docker build -t ${OCP_REG}/${PROJECT_NAME}/${SERVICE_NAME}:latest .'
                 }
             }
         }
@@ -42,8 +43,8 @@ spec:
         }
         stage('Release'){
             steps('Push OCP Registry') {
-                container('builder'){
-                    sh 'oc get route -n openshift-image-registry'
+                container('dind'){
+                    sh 'docker push ${OCP_REG}/${PROJECT_NAME}/${SERVICE_NAME}:latest'
                 }
             }
         }
