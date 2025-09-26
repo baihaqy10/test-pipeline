@@ -18,12 +18,10 @@ pipeline {
 
         }
     }
-
     environment {
         PROJECT_NAME = "first-project"
         SERVICE_NAME = "first-service"
     }
-
     stages {
         stage('Build') {
             steps('Docker Build') {
@@ -32,7 +30,6 @@ pipeline {
                 }
             }
         }
-        
         stage('App Manifest'){
             steps('Project Check'){
                 container('builder'){
@@ -51,7 +48,6 @@ pipeline {
                 }
             }
         }
-
         stage('Release'){
             steps('Push OCP Registry') {
                 container('builder'){
