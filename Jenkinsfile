@@ -35,7 +35,7 @@ spec:
             steps('Project Check'){
                 container('builder'){
                     sh 'oc login -u admin -p ${OCP_PASSWORD} --server=${API_OCP} --insecure-skip-tls-verify'
-                    sh 'oc create project ${PROJECT_NAME}'
+                    sh 'oc create namespace ${PROJECT_NAME}'
                     sh 'oc project ${PROJECT_NAME}'
                 }
             }
