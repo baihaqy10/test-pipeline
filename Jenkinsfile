@@ -22,6 +22,7 @@ spec:
         SERVICE_NAME = "first-service"
         OCP_USERNAME = credentials('OCP-CRED')
         OCP_PASSWORD = credentials('OCP-CRED')
+        API_OCP = credentials('ocp-api')
     }
     stages {
         stage('Build') {
