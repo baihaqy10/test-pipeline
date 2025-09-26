@@ -1,9 +1,10 @@
 pipeline {
+    agent none
+    environment {
+        PROJECT_NAME = "first-project"
+        SERVICE_NAME = "first-service"
+    }
     agent {
-        environment {
-            PROJECT_NAME = "first-project"
-            SERVICE_NAME = "first-app"
-        }
         kubernetes {
             yaml '''
 apiVersion: v1
@@ -30,15 +31,23 @@ spec:
                     usernameVariable: "NEXUS_USERNAME",
                     passwordVariable: "NEXUS_PASSWORD")]) {
                         sh "docker login -u ${NEXUS_USERNAME} -p ${NEXUS_PASSWORD} ${NEXUS_HOSTED}"
-                        sh 'docker build -t ${NEXUS_HOSTED}/${NEXUS_PROJECT}/${NEXUS_SERVICE}:latest .'
-                        sh 'docker push ${NEXUS_HOSTED}/${NEXUS_PROJECT}/${NEXUS_SERVICE}:latest'
+                        sh "docker build -t ${NEXUS_HOSTED}/${PROJECT_NAME}/${SERVICE_NAME}:latest ."
+                        sh "docker push ${NEXUS_HOSTED}/${PROJECT_NAME}/${SERVICE_NAME}:latest"
                     }
                 }
             }
         }
         stage('Release') {
             steps {
-                container()
+                container('buildeR') {
+                    withCredentials([string(credentialsId: 'OCP-CRED',
+                    usernameVariable: "OCP_USERNAME",
+                    passwordVariable: "OCP_PASSWORD")]) {
+                        sh 'oc login --token=${OCP_TOKEN} --server=${API_OCP} --insecure-skip-tls-verify'
+                        sh 'oc login --token=${OCP_TOKEN} --server=${API_OCP} --insecure-skip-tls-verify'
+                        sh 'oc login --token=${OCP_TOKEN} --server=${API_OCP} --insecure-skip-tls-verify'
+                    }                    
+                }
             }
         }
         stage('Deploy') {
