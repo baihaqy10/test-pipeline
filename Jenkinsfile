@@ -1,22 +1,5 @@
 pipeline {
-    agent {
-        kubernetes {
-            yaml '''
-apiVersion: v1
-kind: Pod
-spec:
-  containers:
-  - name: builder
-    image: 'image-registry.openshift-image-registry.svc:5000/openshift/cli'
-    command: ['/bin/cat']
-    tty: true
-  - name: dind
-    image: 'docker:dind'
-    securityContext:
-      privileged: true
-'''
-        }
-    }
+    agent any
     environment {
         PROJECT_NAME = "first-project"
         SERVICE_NAME = "first-service"
@@ -26,14 +9,14 @@ spec:
     stages {
         stage('Build') {
             steps('Docker Build') {
-                container('dind') {
+                script {
                     sh 'docker build -t ${PROJECT_NAME}/${SERVICE_NAME}:latest .'
                 }
             }
         }
         stage('App Manifest'){
             steps('Project Check'){
-                container('builder'){
+                script{
                     sh 'oc login -u admin -p ${OCP_PASSWORD} --server=${API_OCP} --insecure-skip-tls-verify'
                     sh 'oc create project ${PROJECT_NAME}'
                     sh 'oc project ${PROJECT_NAME}'
