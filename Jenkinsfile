@@ -33,8 +33,8 @@ spec:
                             passwordVariable: "NEXUS_PASSWORD")]) {
                                 env.NEXUS_USER = 'admin'
                                 env.NEXUS_PASS = 'nexusabc'
-                                sh "docker login -u ${NEXUS_USERN} -p ${NEXUS_PASS} ${NEXUS_GROUP}"
-                                sh "docker login -u ${NEXUS_USER} -p ${NEXUS_PASS} ${NEXUS_HOSTED}"
+                                sh "docker login -u ${env.NEXUS_USER} -p ${env.NEXUS_PASS} ${NEXUS_GROUP}"
+                                sh "docker login -u ${env.NEXUS_USER} -p ${envNEXUS_PASS} ${NEXUS_HOSTED}"
                                 sh "docker build -t ${NEXUS_HOSTED}/${PROJECT_NAME}/${SERVICE_NAME}:latest ."
                                 sh "docker push ${NEXUS_HOSTED}/${PROJECT_NAME}/${SERVICE_NAME}:latest"
                             }
