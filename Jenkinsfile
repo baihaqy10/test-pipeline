@@ -25,7 +25,6 @@ spec:
         stage('Build') {
             steps {
                 container('dind') {
-                    #withCredentials([string(credentialsId: 'OCP_TOKEN', variable: 'OCP_TOKEN')])
                     withCredentials([string(credentialsId: 'nexus-hosted', variable: 'NEXUS_HOSTED')])
                     withCredentials([string(credentialsId: 'nexus-secret', 
                     usernameVariable: "NEXUS_USERNAME",
