@@ -39,7 +39,7 @@ spec:
                     passwordVariable: "OCP_PASSWORD")]) {
                         withCredentials([string(credentialsId: 'ocp-api', variable: 'API_OCP')]){
                             sh 'oc login -u ${OCP_USERNAME} -p ${OCP_PASSWORD} --server=${API_OCP} --insecure-skip-tls-verify'
-                            SH 'oc get pod -n jenkins'
+                            sh 'oc get pod -n jenkins'
                         }
                     }                    
                 }
