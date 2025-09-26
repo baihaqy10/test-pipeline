@@ -15,7 +15,7 @@ spec:
     securityContext:
       privileged: true
   - name: helm
-    image: 'helm:latest
+    image: 'helm:latest'
     command: ['/bin/cat']
 '''
         }
