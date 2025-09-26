@@ -25,8 +25,7 @@ spec:
         stage('Build') {
             steps {
                 container('dind') {
-                    sh "docker build -t ${PROJECT_NAME}/${SERVICE_NAME}:latest ."
-                        }
+                    sh "docker build -t ${PROJECT_NAME}/${SERVICE_NAME}:latest ."                        }
                     }
                 }
             }

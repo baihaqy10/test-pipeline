@@ -7,8 +7,8 @@ WORKDIR /app
 COPY package*.json ./
 
 # Instal dependensi
-RUN npm install
-
+RUN npm install && \
+    npm fund
 # Salin sisa kode aplikasi
 COPY . .
 
