@@ -43,9 +43,19 @@ spec:
         stage('Release'){
             steps('Push OCP Registry') {
                 container('dind'){
-                    sh 'docker login -u admin -p $(oc whoami -t) ${OCP_REG}'
+                    sh 'docker login -u admin -p ${OCP_PASSWORD} ${OCP_REG}'
                     sh 'docker push ${OCP_REG}/${PROJECT_NAME}/${SERVICE_NAME}:latest'
                 }
+            }
+        }
+        stage('Meluncurrr') {
+            steps {
+                container('builder') {
+                    sh 'helm repo add stable https://charts.helm.sh/stable'
+                    sh 'helm repo update'
+                    sh 'helm install my-release --set image.repository=${OCP_REG}/${PROJECT_NAME}/${SERVICE_NAME} --set image.tag=latest stable/my-chart'
+                }
+            }
             }
         }
     }
