@@ -25,13 +25,14 @@ spec:
         stage('Build') {
             steps {
                 container('dind') {
-                    withCredentials([string(credentialsId: 'nexus-hosted', variable: 'NEXUS_HOSTED')])
-                    withCredentials([string(credentialsId: 'nexus-secret', 
-                    usernameVariable: "NEXUS_USERNAME",
-                    passwordVariable: "NEXUS_PASSWORD")]) {
+                    withCredentials([string(credentialsId: 'nexus-hosted', variable: 'NEXUS_HOSTED')]){
+                        withCredentials([string(credentialsId: 'nexus-secret', 
+                        usernameVariable: "NEXUS_USERNAME",
+                        passwordVariable: "NEXUS_PASSWORD")]) {
                         sh "docker login -u ${NEXUS_USERNAME} -p ${NEXUS_PASSWORD} ${NEXUS_HOSTED}"
                         sh "docker build -t ${NEXUS_HOSTED}/${PROJECT_NAME}/${SERVICE_NAME}:latest ."
                         sh "docker push ${NEXUS_HOSTED}/${PROJECT_NAME}/${SERVICE_NAME}:latest"
+                        }
                     }
                 }
             }
