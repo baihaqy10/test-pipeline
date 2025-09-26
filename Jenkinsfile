@@ -25,8 +25,7 @@ spec:
         stage('Build') {
             steps {
                 container('dind') {
-                    sh "docker build -t ${PROJECT_NAME}/${SERVICE_NAME}:latest ."                        }
-                    }
+                    sh "docker build -t ${PROJECT_NAME}/${SERVICE_NAME}:latest ."
                 }
             }
         }
@@ -42,7 +41,7 @@ spec:
                             sh 'oc create project ${PROJECT_NAME}'
                             sh 'oc project ${PROJECT_NAME}'
                         }
-                    }                    
+                    }
                 }
             }
         }
@@ -59,3 +58,5 @@ spec:
                 }
             }
         }
+    }
+}
