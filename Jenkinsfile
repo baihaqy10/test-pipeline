@@ -22,7 +22,7 @@ spec:
         SERVICE_NAME = "first-service"
         OCP_PASSWORD = credentials('admin-cres')
         API_OCP = credentials('ocp-api')
-        OCP_REG = credentials('ocp-registry')
+        OCP_REG = "image-registry.openshift-image-registry.svc:5000"
     }
     stages {
         stage('Build') {
