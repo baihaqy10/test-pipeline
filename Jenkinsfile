@@ -29,14 +29,23 @@ spec:
                 }
             }
         }
+        stage('App Manifest') {
+            steps {
+                container('builder') {
+                    withCredentials([string(credentialsId:'OCP-CRED',usernameVariable: "OCP_USERNAME", passwordVariable: "OCP_PASSWORD")]) {
+                        withCredentials([string(credentialsId: 'ocp-api', variable: 'API_OCP')]) {
+                            sh 'oc login -u ${OCP_USERNAME} -p ${OCP_PASSWORD} --server=${API_OCP} --insecure-skip-tls-verify'
+                            sh 'oc create project ${PROJECT_NAME}'
+                            sh 'oc project ${PROJECT_NAME}'
+                }
+            }
+        }
         stage('Release') {
             steps {
                 container('builder') {
-                    withCredentials([string(credentialsId: 'OCP-CRED',usernameVariable: "OCP_USERNAME", passwordVariable: "OCP_PASSWORD")]) {
+                    withCredentials([string(credentialsId:'OCP-CRED',usernameVariable: "OCP_USERNAME", passwordVariable: "OCP_PASSWORD")]) {
                         withCredentials([string(credentialsId: 'ocp-api', variable: 'API_OCP')]) {
                             sh 'oc login -u ${OCP_USERNAME} -p ${OCP_PASSWORD} --server=${API_OCP} --insecure-skip-tls-verify'
-                            sh 'oc get pod -n jenkins'
-                            sh 'oc create project ${PROJECT_NAME}'
                             sh 'oc project ${PROJECT_NAME}'
                         }
                     }
