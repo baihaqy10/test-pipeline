@@ -1,5 +1,5 @@
 pipeline {
-    agent {
+    agent none
     environment {
         PROJECT_NAME = "first-project"
         SERVICE_NAME = "first-service"
@@ -39,7 +39,7 @@ spec:
         }
         stage('Release') {
             steps {
-                container('buildeR') {
+                container('builde') {
                     withCredentials([string(credentialsId: 'OCP-CRED',
                     usernameVariable: "OCP_USERNAME",
                     passwordVariable: "OCP_PASSWORD")]) {
