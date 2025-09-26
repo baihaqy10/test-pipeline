@@ -1,9 +1,10 @@
 pipeline {
-    agent none
+    agent {
     environment {
         PROJECT_NAME = "first-project"
         SERVICE_NAME = "first-service"
     }
+}
     agent {
         kubernetes {
             yaml '''
