@@ -1,4 +1,4 @@
-FROM itg-nexus-repo.apps.cluster-ctqzf.dynamic.redhatworkshops.io/repository/repo_docker_group/node:18-alpine
+FROM node:18-alpine
 
 # Buat direktori kerja di dalam container
 WORKDIR /app
