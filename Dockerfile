@@ -1,4 +1,4 @@
-FROM registry.redhat.io/ubi8/nodejs-16 AS build
+FROM registry.access.redhat.com/ubi8/nodejs-16:16  build
 
 USER root
 WORKDIR /app
