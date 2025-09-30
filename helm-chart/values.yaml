@@ -1,0 +1,10 @@
+replicaCount: 1
+
+image:
+  repository: image-registry.openshift-image-registry.svc:5000/contoh-deployment/contoh-deployment
+  tag: latest
+  pullPolicy: Always
+
+service:
+  type: ClusterIP
+  port: 8080
