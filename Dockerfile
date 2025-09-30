@@ -8,7 +8,7 @@ ENV GENERATE_SOURCEMAP false
 ENV NODE_OPTIONS --max_old_space_size=4096
 ENV DOTNET_SYSTEM_GLOBALOZATION_INVARIANT=1
 # Instal dependensi
-RUN microdnf install libicu-devel --nodocs --setopt=install_weak_deps=0 --best && \
+RUN dnf install libicu-devel --nodocs --setopt=install_weak_deps=0 --best && \
     npm install && \
     npm fund
 
