@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/nodejs-16 AS build
+FROM registry.redhat.io/ubi8/nodejs-16 AS build
 
 USER root
 WORKDIR /app
@@ -8,8 +8,7 @@ ENV GENERATE_SOURCEMAP false
 ENV NODE_OPTIONS --max_old_space_size=4096
 ENV DOTNET_SYSTEM_GLOBALOZATION_INVARIANT=1
 # Instal dependensi
-RUN microdnf install libicu-devel --nodocs --setopt=install_weak_deps=0 --best && \
-    npm install && \
+RUN npm install && \
     npm fund
 
 FROM nginx:1.24-alpine
