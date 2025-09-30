@@ -1,19 +1,19 @@
-FROM node:18-alpine
+FROM node:16 as build
 
-# Buat direktori kerja di dalam container
+USER root
 WORKDIR /app
-
-# Salin package.json dan package-lock.json
-COPY package*.json ./
-
-# Instal dependensi
-RUN npm install && \
-    npm fund
-# Salin sisa kode aplikasi
 COPY . .
 
-# Ekspos port 3000
-EXPOSE 3000
+ENV GENERATE_SOURCEMAP false
+ENV NODE_OPTIONS --max_old_space_size=4096
+ENV DOTNET_SYSTEM_GLOBALOZATION_INVARIANT=1
+# Instal dependensi
+RUN microdnf install libicu-devel --nodocs --setopt=install_weak_deps=0 --best && \
+    npm install && \
+    npm fund
 
-# Jalankan aplikasi saat container dimulai
-CMD ["npm", "start"]
+FROM nginx:1.24-alpine
+
+USER USER
+
+COPY --from=build --chown=user /app/.retype /usr/share/nginx/html

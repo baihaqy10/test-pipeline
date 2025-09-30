@@ -1,0 +1,24 @@
+input: .
+output: .retype
+url: 
+
+branding:
+  title: BAY's first book
+  label: v1.0.0
+
+edit:
+  repo: github.com/baihaqy10/test-pipeline.git
+
+links:
+  - text: Home
+    link: /README.md
+    icon: home
+  - text: Blog
+    link: /blog
+    icon: star
+  - text: Annoncement & Info
+    link: /#
+    icon: rss
+
+footer:
+ copyright: "&copy; Copyright 2022 - {{ year }}. All right reserved"
