@@ -36,7 +36,22 @@ spec:
             steps {
                 container('builder'){
                     sh 'oc login -u admin -p ${OCP_PASSWORD} --server=${API_OCP} --insecure-skip-tls-verify'
-                    sh 'oc project ${PROJECT_NAME}'
+                    sh """
+            PROJECT_NAME='${PROJECT_NAME}'
+            
+            # Check if the project exists silently
+            if oc get project \$PROJECT_NAME > /dev/null 2>&1; then
+                echo "OpenShift Project '\$PROJECT_NAME' already exists. Switching context to it."
+                oc project \$PROJECT_NAME
+            else
+                echo "OpenShift Project '\$PROJECT_NAME' does not exist. Creating namespace and setting context."
+                
+                # Create the namespace and switch to it.
+                # oc create namespace is used as requested, followed by oc project.
+                oc create namespace \$PROJECT_NAME
+                oc project \$PROJECT_NAME
+            fi
+        """
                     }
                 }
             }
