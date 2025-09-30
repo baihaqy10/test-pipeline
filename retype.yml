@@ -21,4 +21,4 @@ links:
     icon: rss
 
 footer:
- copyright: "&copy; Copyright 2022 - {{ year }}. All right reserved"
+ copyright: "&copy; Copyright 1999 - {{ year }}. All right reserved"
