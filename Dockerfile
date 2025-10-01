@@ -8,7 +8,7 @@ ENV GENERATE_SOURCEMAP false
 ENV NODE_OPTIONS --max_old_space_size=4096
 ENV DOTNET_SYSTEM_GLOBALOZATION_INVARIANT=1
 
-RUN apk add --no-cache libicu-dev && \
+RUN apk add --no-cache icu-dev && \
     npm install && \
     npm fund
 
