@@ -10,6 +10,7 @@ ENV DOTNET_SYSTEM_GLOBALOZATION_INVARIANT=1
 
 RUN apk add --no-cache icu-dev && \
     npm install && \
+    ls -la /app && \
     npm fund
 
 FROM nginx:1.24-alpine
