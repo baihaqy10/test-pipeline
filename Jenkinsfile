@@ -23,13 +23,14 @@ spec:
         OCP_PASSWORD = credentials('admin-cres')
         API_OCP = credentials('ocp-api')
         OCP_REG = "image-registry.openshift-image-registry.svc:5000"
+        OCP_TOKEN = credentails('ocp-token')
     }
     stages {
         stage('Build') {
             steps('Docker Build') {
                 container('dind') {
                     sh 'docker build -t ${OCP_REG}/${PROJECT_NAME}/${SERVICE_NAME}:latest .'
-                    sh 'docker login -u admin -p ${OCP_PASSWORD} ${OCP_REG}'
+                    sh 'docker login -u admin -p ${OCP_TOKEN} ${OCP_REG}'
                     sh 'docker push ${OCP_REG}/${PROJECT_NAME}/${SERVICE_NAME}:latest'
                 }
             }
