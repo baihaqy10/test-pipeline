@@ -14,5 +14,8 @@
   "license": "ISC",
   "devDependencies": {
     "retypeapp": "^3.6.0"
+  },
+  "dependencies": {
+    "retype": "^0.2.0"
   }
 }
