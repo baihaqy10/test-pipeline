@@ -1,4 +1,4 @@
-FROM node:16.14.0-alpine3.15 as build
+FROM registry.access.redhat.com/ubi8/nodejs-14:latest as build
 
 USER root
 WORKDIR /app
