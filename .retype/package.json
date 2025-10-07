@@ -6,8 +6,7 @@
   "scripts": {
     "re-init": "retype innit",
     "re-build": "retype build",
-    "re-watch": "retype watch",
-    "re-run": "retype-run"
+    "re-watch": "retype watch"
   },
   "keywords": [],
   "author": "bay",
