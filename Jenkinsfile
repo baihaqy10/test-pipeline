@@ -32,29 +32,16 @@ spec:
                 }
             }
         }
-        stage('App Manifest'){
+        stage('APP Manifest') {
             steps {
-                container('builder'){
-                    sh 'oc login -u admin -p ${OCP_PASSWORD} --server=${API_OCP} --insecure-skip-tls-verify'
-                    sh """
-            PROJECT_NAME='${PROJECT_NAME}'
-            
-            # Check if the project exists silently
-            if oc get project \$PROJECT_NAME > /dev/null 2>&1; then
-                echo "OpenShift Project '\$PROJECT_NAME' already exists. Switching context to it."
-                oc project \$PROJECT_NAME
-            else
-                echo "OpenShift Project '\$PROJECT_NAME' does not exist. Creating namespace and setting context."
-                
-                # Create the namespace and switch to it.
-                # oc create namespace is used as requested, followed by oc project.
-                oc create namespace \$PROJECT_NAME
-                oc project \$PROJECT_NAME
-            fi
-        """
-                    }
-                }
+                sh """
+                oc login -u admin -p ${OCP_PASSWORD} --SERVER=${API_OCP} --insecure-skip-tls-verify=true
+                if ! oc get project ${NAMESPACE} >/dev/null 2>&1; then
+                    oc new-project ${NAMESPACE} --description="Project for ${APP_NAME}"
+                fi
+                """
             }
+        }
         stage('Release'){
             steps('Push OCP Registry') {
                 container('dind'){
@@ -63,13 +50,15 @@ spec:
                 }
             }
         }
-        stage('Meluncurrr') {
+        stage('deploy') {
             steps {
-                container('builder') {
-                    sh 'helm repo add stable https://charts.helm.sh/stable'
-                    sh 'helm repo update'
-                    sh 'helm install my-release --set image.repository=${OCP_REG}/${PROJECT_NAME}/${SERVICE_NAME} --set image.tag=latest stable'
-                }
+                sh """
+                export PATH=\$WORKSPACE/bin:\$PATH
+                helm upgrade --install ${APP_NAME} ./helm-chart \\
+                  --set image.repository=image-registry.openshift-image-registry.svc:5000/${NAMESPACE}/${SERVICE_NAME} \\
+                  --set image.tag=latest \\
+                  -n ${NAMESPACE} --create-namespace
+                """
             }
         }
     }
