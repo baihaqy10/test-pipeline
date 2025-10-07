@@ -29,7 +29,7 @@ spec:
             steps('Docker Build') {
                 container('dind') {
                     sh 'docker build -t ${OCP_REG}/${PROJECT_NAME}/${SERVICE_NAME}:latest .'
-                    sh 'docker login -u admin -p ${OCP_PASSWORD} ${OCP_REG} --insecure-skip-tls-verify'
+                    sh 'docker login -u admin -p ${OCP_PASSWORD} ${OCP_REG}'
                     sh 'docker push ${OCP_REG}/${PROJECT_NAME}/${SERVICE_NAME}:latest'
                 }
             }
@@ -57,7 +57,7 @@ spec:
                 sh """
                 export PATH=\$WORKSPACE/bin:\$PATH
                 helm upgrade --install ${APP_NAME} ./helm-chart \\
-                  --set image.repository=image-registry.openshift-image-registry.svc:5000/${NAMESPACE}/${SERVICE_NAME} \\
+                  --set image.repository=${OCP_REG}/${PROJECT_NAME}/${SERVICE_NAME}:latest \\
                   --set image.tag=latest \\
                   -n ${NAMESPACE} --create-namespace
                 """
