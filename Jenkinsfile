@@ -29,6 +29,7 @@ spec:
         stage('Build') {
             steps('Docker Build') {
                 container('dind') {
+                    sh 'mkdir /etc/docker'
                     sh 'echo \'{"insecure-registries": ["image-registry.openshift-image-registry.svc:5000"]}\' >/etc/docker/daemon.json'
                     sh 'docker info'
                     sh 'docker system info'
