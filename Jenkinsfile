@@ -1,5 +1,6 @@
 pipeline {
     agent any
+
     environment {
         PROJECT_NAME = "first-project"
         SERVICE_NAME = "first-service"
@@ -8,6 +9,7 @@ pipeline {
         OCP_REG = "image-registry.openshift-image-registry.svc:5000"
         OCP_TOKEN = credentials('ocp-token')
     }
+    
      stages {
         stage('Checkout') {
             steps {
