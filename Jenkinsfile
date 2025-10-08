@@ -1,6 +1,22 @@
 pipeline {
-    agent any
-
+    agent {
+        kubernetes {
+            yaml '''
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+  - name: builder
+    image: 'image-registry.openshift-image-registry.svc:5000/openshift/cli'
+    command: ['/bin/cat']
+    tty: true
+  - name: dind
+    image: 'docker:dind'
+    securityContext:
+      privileged: true
+'''
+        }
+    }
     environment {
         PROJECT_NAME = "first-project"
         SERVICE_NAME = "first-service"
@@ -8,76 +24,48 @@ pipeline {
         API_OCP = credentials('ocp-api')
         OCP_REG = "image-registry.openshift-image-registry.svc:5000"
         OCP_TOKEN = credentials('ocp-token')
+        TLS_CERT = credentials('tls-cert')
     }
-    
-     stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-
-        stage('login') {
-            steps {
-                sh """
-                oc login ${API_OCP} --token=${OCP_TOKEN} --insecure-skip-tls-verify=true
-                if ! oc get project ${PROJECT_NAME} >/dev/null 2>&1; then
-                    oc new-project ${PROJECT_NAME} --description="Project for ${SERVICE_NAME}"
-                fi
-                """
-            }
-        }
-
-        stage('buildconfig') {
-            steps {
-                sh """
-                if ! oc get bc ${SERVICE_NAME} -n ${PROJECT_NAME}; then
-                  oc new-build --name=${SERVICE_NAME} --binary --strategy=docker -n ${PROJECT_NAME}
-                fi
-                """
-            }
-        }
-
-        stage('build openshift') {
-            steps {
-                sh """
-                oc start-build ${SERVICE_NAME} --from-dir=. --follow -n ${PROJECT_NAME}
-                """
-            }
-        }
-
-        stage('install helm bogo') {
-            steps {
-                sh """
-                curl -sSL https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz -o helm.tar.gz
-                tar -xzf helm.tar.gz
-                mkdir -p \$WORKSPACE/bin
-                mv linux-amd64/helm \$WORKSPACE/bin/helm
-                export PATH=\$WORKSPACE/bin:\$PATH
-                \$WORKSPACE/bin/helm version
-                """
-            }
-        }
-
-        stage('deploy') {
-            steps {
-                sh """
-                export PATH=\$WORKSPACE/bin:\$PATH
-                helm upgrade --install ${SERVICE_NAME} ./helm-chart \\
-                  --set image.repository=image-registry.openshift-image-registry.svc:5000/${PROJECT_NAME}/${SERVICE_NAME} \\
-                  --set image.tag=latest \\
-                  -n ${PROJECT_NAME} --create-namespace
-                """
-            }
-        }
-
-        stage('rollout') {
-            steps {
-                script {
-                    sh """
-                    oc rollout restart deployment ${SERVICE_NAME} -n ${PROJECT_NAME}
-                    """
+    stages {
+        stage('Build') {
+            steps('Docker Build') {
+                container('dind') {
+                    sh 'mkdir -p /etc/docker/certs.d/${OCP_REG}'
+                    sh 'echo \'{"insecure-registries": ["image-registry.openshift-image-registry.svc:5000"]}\' >/etc/docker/daemon.json'
+                    sh 'echo "${TLS_CERT}" > /etc/docker/certs.d/${OCP_REG}/ca.crt'
+                    sh 'docker build -t ${OCP_REG}/${PROJECT_NAME}/${SERVICE_NAME}:latest .'
+                    sh 'echo "${OCP_TOKEN}" | docker login -u admin --password-stdin ${OCP_REG}'
+                    sh 'docker push ${OCP_REG}/${PROJECT_NAME}/${SERVICE_NAME}:latest'
                 }
+            }
+        }
+        stage('APP Manifest') {
+            steps {
+                sh """
+                oc login -u admin -p ${OCP_PASSWORD} --SERVER=${API_OCP} --insecure-skip-tls-verify=true
+                if ! oc get project ${NAMESPACE} >/dev/null 2>&1; then
+                    oc new-project ${NAMESPACE} --description="Project for ${APP_NAME}"
+                fi
+                """
+            }
+        }
+        stage('Release'){
+            steps('Push OCP Registry') {
+                container('dind'){
+                    sh 'docker login -u admin -p ${OCP_PASSWORD} ${OCP_REG} --insecure-skip-tls-verify'
+                    sh 'docker push ${OCP_REG}/${PROJECT_NAME}/${SERVICE_NAME}:latest'
+                }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh """
+                export PATH=\$WORKSPACE/bin:\$PATH
+                helm upgrade --install ${APP_NAME} ./helm-chart \\
+                  --set image.repository=${OCP_REG}/${PROJECT_NAME}/${SERVICE_NAME}:latest \\
+                  --set image.tag=latest \\
+                  -n ${NAMESPACE} --create-namespace
+                """
             }
         }
     }
