@@ -28,6 +28,17 @@ spec:
         TLS_CERT = credentials('tls-cert')
     }
     stages { 
+        stage('APP Manifest') {
+            steps {
+                sh """
+                oc login -u admin -p ${OCP_PASSWORD} --SERVER=${API_OCP} --insecure-skip-tls-verify=true
+                if ! oc get project ${NAMESPACE} >/dev/null 2>&1; then
+                    oc new-project ${NAMESPACE} --description="Project for ${APP_NAME}"
+                fi
+                """
+            }
+        }
+        
         stage('Build') {
             steps('Docker Build') {
                 container('dind') {
@@ -42,16 +53,7 @@ spec:
                 }
             }
         }
-        stage('APP Manifest') {
-            steps {
-                sh """
-                oc login -u admin -p ${OCP_PASSWORD} --SERVER=${API_OCP} --insecure-skip-tls-verify=true
-                if ! oc get project ${NAMESPACE} >/dev/null 2>&1; then
-                    oc new-project ${NAMESPACE} --description="Project for ${APP_NAME}"
-                fi
-                """
-            }
-        }
+        
         stage('Release'){
             steps('Push OCP Registry') {
                 container('dind'){
