@@ -23,7 +23,7 @@ spec:
         OCP_PASSWORD = credentials('admin-cres')
         API_OCP = credentials('ocp-api')
         OCP_REG = "image-registry.openshift-image-registry.svc:5000"
-        OCP_TOKEN = credentails('ocp-token')
+        OCP_TOKEN = credentials('ocp-token')
     }
     stages {
         stage('Build') {
@@ -53,7 +53,7 @@ spec:
                 }
             }
         }
-        stage('deploy') {
+        stage('Deploy') {
             steps {
                 sh """
                 export PATH=\$WORKSPACE/bin:\$PATH
