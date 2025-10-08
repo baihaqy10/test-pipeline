@@ -33,8 +33,12 @@ spec:
         stage('APP Manifest') {
             steps('Project Reserve'){
                 container('builder') {
-                    sh 'oc login -u admin --token=${OCP_TOKEN} --SERVER=${API_OCP} --insecure-skip-tls-verify=true'
-                    sh 'if ! oc get project ${PROJECT_NAME} >/dev/null 2>&1; then oc new-project ${PROJECT_NAME} --description="Project for ${SERVICE_NAME}" fi'
+                    sh """
+                    oc login ${API_OCP} --token=${OCP_TOKEN} --insecure-skip-tls-verify=true
+                    if ! oc get project ${NAMESPACE} >/dev/null 2>&1; then
+                        oc new-project ${NAMESPACE} --description="Project for ${APP_NAME}"
+                    fi
+                    """
                 }
             }
         }
