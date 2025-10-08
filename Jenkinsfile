@@ -27,15 +27,15 @@ spec:
         OCP_TOKEN = credentials('ocp-token')
         TLS_CERT = credentials('tls-cert')
     }
-    stages {
+    stages { 
         stage('Build') {
             steps('Docker Build') {
                 container('dind') {
                     sh 'docker build -t ${OCP_REG}/${PROJECT_NAME}/${SERVICE_NAME}:latest .'
                     sh 'mkdir -p /etc/docker/certs.d/${OCP_REG}'
                     //sh 'echo \'{"insecure-registries": ["image-registry.openshift-image-registry.svc:5000"]}\' >/etc/docker/daemon.json'
-                    //sh 'echo "${TLS_CERT}" > /etc/docker/certs.d/${OCP_REG}/ca.crt'
-                    sh 'echo ${TLS_CERT}'
+                    sh 'echo "${TLS_CERT}" >> /etc/docker/certs.d/${OCP_REG}/ca.crt'
+                    sh 'ls -lrth'
                     sh 'cat /etc/docker/certs.d/${OCP_REG}/ca.crt'
                     sh 'echo "${OCP_TOKEN}" | docker login -u admin --password-stdin ${OCP_REG}'
                     sh 'docker push ${OCP_REG}/${PROJECT_NAME}/${SERVICE_NAME}:latest'
