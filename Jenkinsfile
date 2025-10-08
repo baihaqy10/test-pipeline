@@ -5,7 +5,7 @@ pipeline {
 apiVersion: v1
 kind: Pod
 spec:
-  serviceAccount:'jenkins'
+  serviceAccount: 'jenkins'
   containers:
   - name: builder
     image: 'image-registry.openshift-image-registry.svc:5000/openshift/cli'
