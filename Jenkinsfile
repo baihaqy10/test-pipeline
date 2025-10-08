@@ -30,7 +30,7 @@ spec:
             steps('Docker Build') {
                 container('dind') {
                     sh 'docker build -t ${OCP_REG}/${PROJECT_NAME}/${SERVICE_NAME}:latest .'
-                    sh 'docker login -u admin -p ${OCP_TOKEN} ${OCP_REG} --tls-verify=false'
+                    sh 'echo "${OCP_TOKEN}" | docker login -u admin --password-stdin ${OCP_REG} --tls-verify=false'
                     sh 'docker push ${OCP_REG}/${PROJECT_NAME}/${SERVICE_NAME}:latest'
                 }
             }
