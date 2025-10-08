@@ -6,7 +6,7 @@ apiVersion: v1
 kind: Pod
 spec:
   nodeSelector:
-    kubernetes.io/hostname=worker-cluster-5l9jh-1
+    kubernetes.io/hostname: worker-cluster-5l9jh-1
   serviceAccount: 'jenkins'
   containers:
   - name: builder
