@@ -34,7 +34,7 @@ spec:
                     sh 'docker info'
                     sh 'docker system info'
                     sh 'docker build -t ${OCP_REG}/${PROJECT_NAME}/${SERVICE_NAME}:latest .'
-                    sh 'echo "${OCP_TOKEN}" | docker login -u admin --password-stdin ${OCP_REG} --tls-verify=false'
+                    sh 'echo "${OCP_TOKEN}" | docker login -u admin --password-stdin ${OCP_REG}'
                     sh 'docker push ${OCP_REG}/${PROJECT_NAME}/${SERVICE_NAME}:latest'
                 }
             }
