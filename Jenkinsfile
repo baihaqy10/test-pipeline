@@ -29,13 +29,15 @@ spec:
     }
     stages { 
         stage('APP Manifest') {
-            steps {
-                sh """
-                oc login -u admin -p ${OCP_PASSWORD} --SERVER=${API_OCP} --insecure-skip-tls-verify=true
-                if ! oc get project ${PROJECT_NAME} >/dev/null 2>&1; then
-                    oc new-project ${PROJECT_NAME} --description="Project for ${SERVICE_NAME}"
-                fi
-                """
+            steps('Project Reserve'){
+                container('builder') {
+                    sh """
+                    oc login -u admin -p ${OCP_PASSWORD} --SERVER=${API_OCP} --insecure-skip-tls-verify=true
+                    if ! oc get project ${PROJECT_NAME} >/dev/null 2>&1; then
+                        oc new-project ${PROJECT_NAME} --description="Project for ${SERVICE_NAME}"
+                    fi
+                    """
+                }
             }
         }
 
