@@ -11,7 +11,7 @@ spec:
     command: ['/bin/cat']
     tty: true
   - name: dind
-    image: 'quay.io/podman/stable:latest'
+    image: 'docker:dind'
     securityContext:
       privileged: true
 '''
@@ -29,9 +29,9 @@ spec:
         stage('Build') {
             steps('Docker Build') {
                 container('dind') {
-                    sh 'podman build -t ${OCP_REG}/${PROJECT_NAME}/${SERVICE_NAME}:latest .'
-                    sh 'podman login -u admin -p ${OCP_TOKEN} ${OCP_REG} --tls-verify=false'
-                    sh 'podman push ${OCP_REG}/${PROJECT_NAME}/${SERVICE_NAME}:latest'
+                    sh 'docker build -t ${OCP_REG}/${PROJECT_NAME}/${SERVICE_NAME}:latest .'
+                    sh 'docker login -u admin -p ${OCP_TOKEN} ${OCP_REG} --tls-verify=false'
+                    sh 'docker push ${OCP_REG}/${PROJECT_NAME}/${SERVICE_NAME}:latest'
                 }
             }
         }
