@@ -33,7 +33,7 @@ spec:
                     sh 'docker build -t ${OCP_REG}/${PROJECT_NAME}/${SERVICE_NAME}:latest .'
                     sh 'mkdir -p /etc/docker/certs.d/${OCP_REG}'
                     //sh 'echo \'{"insecure-registries": ["image-registry.openshift-image-registry.svc:5000"]}\' >/etc/docker/daemon.json'
-                    sh 'cat /rtc/docker/certs.d/${OCP_REG}/ca.crt'
+                    sh 'cat /etc/docker/certs.d/${OCP_REG}/ca.crt'
                     sh 'echo "${TLS_CERT}" > /etc/docker/certs.d/${OCP_REG}/ca.crt'
                     sh 'echo "${OCP_TOKEN}" | docker login -u admin --password-stdin ${OCP_REG}'
                     sh 'docker push ${OCP_REG}/${PROJECT_NAME}/${SERVICE_NAME}:latest'
