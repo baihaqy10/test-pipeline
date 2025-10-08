@@ -29,6 +29,9 @@ spec:
         stage('Build') {
             steps('Docker Build') {
                 container('dind') {
+                    sh 'echo \'{"insecure-registries": ["image-registry.openshift-image-registry.svc:5000"]}\' >/etc/docker/daemon.json'
+                    sh 'docker info'
+                    sh 'docker system info'
                     sh 'docker build -t ${OCP_REG}/${PROJECT_NAME}/${SERVICE_NAME}:latest .'
                     sh 'echo "${OCP_TOKEN}" | docker login -u admin --password-stdin ${OCP_REG} --tls-verify=false'
                     sh 'docker push ${OCP_REG}/${PROJECT_NAME}/${SERVICE_NAME}:latest'
