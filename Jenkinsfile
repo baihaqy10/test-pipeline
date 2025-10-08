@@ -30,7 +30,6 @@ spec:
     stages { 
         stage('APP Manifest') {
             steps('Project Reserve'){
-                script
                 container('builder') {
                     sh """
                     echo "${OCP_PASSWORD}" | oc login -u admin --password-stdin --SERVER=${API_OCP} --insecure-skip-tls-verify=true
