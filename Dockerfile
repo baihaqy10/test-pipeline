@@ -14,6 +14,6 @@ RUN dnf install -y libicu-devel --nodocs --setopt=install_weak_deps=0 --best \
 
 FROM nginx:1.24-alpine
 
-USER root
+USER nginx
 #RUN cat /etc/passwd
-COPY --from=build  /app/.retype /usr/share/nginx/html
+COPY --from=build  --chown=nginx /app/.retype /usr/share/nginx/html
