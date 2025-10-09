@@ -15,6 +15,9 @@ RUN dnf install -y libicu-devel --nodocs --setopt=install_weak_deps=0 --best \
 FROM nginx:1.24-alpine
 
 COPY --from=build  /app/.retype /usr/share/nginx/html
+
+RUN rm -f /etc/nginx/conf.d/default.conf
+
 RUN mkdir -p /var/cache/nginx/client_temp \
     && mkdir -p /var/cache/nginx/proxy_temp \
     && mkdir -p /var/cache/nginx/fastcgi_tmp \
@@ -27,22 +30,29 @@ RUN mkdir -p /var/cache/nginx/client_temp \
 #    && sed -i 's/listen \[::\]:80/listen [::]:8080/' /etc/nginx/conf.d/default.conf \
 #   && sed -i '/^user nginx;/d' /etc/nginx/nginx.conf
 
-RUN echo 'server {
-    listen 8080;
-    server_name localhost;
+RUN mkdir -p /etc/nginx/conf.d && \
+    echo 'server {
+        listen 8080;
+        server_name localhost;
  
-    root /usr/share/nginx/html;
-    index index.html;
+        root /usr/share/nginx/html;
+        index index.html;
  
-    location / {
-        try_files $uri $uri/ /index.html;
-    }
- 
-    # Optional: Add caching headers for static assets
-    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg)$ {
-        expires 1y;
-        add_header Cache-Control "public, immutable";
-    }
-}' > /etc/nginx/conf.d/default.conf
+        location / {
+            try_files $uri $uri/ /index.html;
+        }
+
+        error_page 500 502 503 504 /50x.html;
+        location = /50x.html {
+            root /usr/share/nginx/html;
+            }
+        # Optional: Add caching headers for static assets
+        location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg)$ {
+            expires 1y;
+            add_header Cache-Control "public, immutable";
+        }
+    }' > /etc/nginx/conf.d/app.conf
+
+RUN sed -i '/^user nginx;/d' /etc/nginx/nginx.conf
 
 EXPOSE 8080
