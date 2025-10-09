@@ -16,4 +16,4 @@ FROM nginx:1.24-alpine
 
 USER root
 #RUN cat /etc/passwd
-COPY --from=build --chown=user /app/.retype /usr/share/nginx/html
+COPY --from=build --chown=root /app/.retype /usr/share/nginx/html
