@@ -31,27 +31,29 @@ RUN mkdir -p /var/cache/nginx/client_temp \
 #   && sed -i '/^user nginx;/d' /etc/nginx/nginx.conf
 
 RUN mkdir -p /etc/nginx/conf.d && \
-    echo 'server {
-        listen 8080;
-        server_name localhost;
+    cat > /etc/nginx/conf.d/app.conf <<EOF
+server {
+    listen 8080;
+    server_name localhost;
  
-        root /usr/share/nginx/html;
-        index index.html;
+    root /usr/share/nginx/html;
+    index index.html;
  
-        location / {
-            try_files $uri $uri/ /index.html;
-        }
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
 
-        error_page 500 502 503 504 /50x.html;
-        location = /50x.html {
-            root /usr/share/nginx/html;
-            }
-        # Optional: Add caching headers for static assets
-        location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg)$ {
-            expires 1y;
-            add_header Cache-Control "public, immutable";
-        }
-    }' > /etc/nginx/conf.d/app.conf
+    error_page 500 502 503 504 /50x.html;
+    location = /50x.html {
+        root /usr/share/nginx/html;
+    }
+    # Optional: Add caching headers for static assets
+    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg)$ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+    }
+}
+EOF
 
 RUN sed -i '/^user nginx;/d' /etc/nginx/nginx.conf
 
