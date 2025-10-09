@@ -7,7 +7,7 @@ pipeline {
         OCP_PASSWORD = credentials('admin-cres')
         API_OCP = "https://api.cluster-5l9jh.dynamic.redhatworkshops.io:6443"
         OCP_REG = "image-registry.openshift-image-registry.svc:5000"
-        OCP_TOKEN = "sha256~JJZ-ej4Bwn01RwtXmWI6IQ1LpUs-6aMPavk6JfhKl_Y"
+        OCP_TOKEN = "sha256~HqImevy5ttC5j5wJYzX6q49NrDArIRJ9E1iv4Akey5s"
         HELM_VERSION = "v3.15.4"
     }
     
