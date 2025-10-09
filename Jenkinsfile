@@ -5,9 +5,9 @@ pipeline {
         PROJECT_NAME = "first-project"
         SERVICE_NAME = "first-service"
         OCP_PASSWORD = credentials('admin-cres')
-        API_OCP = credentials('ocp-api')
+        API_OCP = "https://api.cluster-5l9jh.dynamic.redhatworkshop.io:6443"
         OCP_REG = "image-registry.openshift-image-registry.svc:5000"
-        OCP_TOKEN = credentials('ocp-token')
+        OCP_TOKEN = "sha256~JJZ-ej4Bwn01RwtXmWI6IQ1LpUs-6aMPavk6JfhKl_Y"
     }
     
      stages {
