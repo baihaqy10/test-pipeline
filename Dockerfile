@@ -30,8 +30,9 @@ RUN mkdir -p /var/cache/nginx/client_temp \
 #    && sed -i 's/listen \[::\]:80/listen [::]:8080/' /etc/nginx/conf.d/default.conf \
 #   && sed -i '/^user nginx;/d' /etc/nginx/nginx.conf
 
-RUN mkdir -p /etc/nginx/conf.d && \
-    ls -lrth
+RUN mkdir -p /etc/nginx/conf.d 
+
+COPY --from=build  default.conf /etc/nginx/conf.d/default.conf
 
 RUN sed -i '/^user nginx;/d' /etc/nginx/nginx.conf
 
