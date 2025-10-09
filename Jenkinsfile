@@ -85,7 +85,10 @@ pipeline {
             steps {
                 script {
                     sh """
-                    for i in ${oc get pod -n ${PROJECT_NAME}  --no-headers | grep build | awk '{print $1}'}; do oc delete pod $i -n ${PROJECT_NAME}; done
+                    for i in \${oc get pod -n ${PROJECT_NAME}  --no-headers | grep build | awk '{print $1}'}; do
+                        echo "Deleting pod: \$"
+                        oc delete pod \$i -n ${PROJECT_NAME}; 
+                    done
                     """
                 }
             }
