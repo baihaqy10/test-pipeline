@@ -31,7 +31,7 @@ RUN mkdir -p /var/cache/nginx/client_temp \
 #   && sed -i '/^user nginx;/d' /etc/nginx/nginx.conf
 
 RUN mkdir -p /etc/nginx/conf.d && \
-    cp -f default.conf /etc/nginx/conf.d/
+    ls -lrth
 
 RUN sed -i '/^user nginx;/d' /etc/nginx/nginx.conf
 
