@@ -31,25 +31,7 @@ RUN mkdir -p /var/cache/nginx/client_temp \
 #   && sed -i '/^user nginx;/d' /etc/nginx/nginx.conf
 
 RUN mkdir -p /etc/nginx/conf.d && \
-    cat <<-EOF > /etc/nginx/conf.d/app.conf
-server {
-listen 8080;
-server_name localhost;
-root /usr/share/nginx/html;
-index index.html;
-location / {
-    try_files $uri $uri/ /index.html;
-}
-error_page 500 502 503 504 /50x.html;
-location = /50x.html {
-    root /usr/share/nginx/html;
-}
-location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg)$ {
-    expires 1y;
-    add_header Cache-Control "public, immutable";
-}
-}
-EOF
+    cp -y default.conf /etc/nginx/conf.d/default.conf
 
 RUN sed -i '/^user nginx;/d' /etc/nginx/nginx.conf
 
