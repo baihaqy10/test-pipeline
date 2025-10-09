@@ -33,6 +33,7 @@ RUN mkdir -p /var/cache/nginx/client_temp \
 RUN mkdir -p /etc/nginx/conf.d 
 
 COPY --from=build  /app/default.conf /etc/nginx/conf.d/default.conf
+COPY --from=build  /app/nginx.conf /etc/nginx/nginx.conf
 
 RUN sed -i '/^user nginx;/d' /etc/nginx/nginx.conf
 
