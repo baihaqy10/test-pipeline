@@ -23,4 +23,8 @@ RUN mkdir -p /var/cache/nginx/client_temp \
     && chown -R nginx:nginx /var/cache/nginx/ \
     && chmod -R 777 /var/cache/nginx/
 
-EXPOSE 80
+RUN sed -i 's/listen    80;/listen      8080;/' /etc/nginx/nginx.conf \
+    && sed -i 's/listen \[::\]:80/listen [::]:8080/' /etc/nginx/conf.d/default.conf \
+    && sed -i '/^user nginx;/d' /etc/nginx/nginx.conf
+
+EXPOSE 8080
