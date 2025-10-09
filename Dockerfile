@@ -14,6 +14,13 @@ RUN dnf install -y libicu-devel --nodocs --setopt=install_weak_deps=0 --best \
 
 FROM nginx:1.24-alpine
 
-USER nginx
-#RUN cat /etc/passwd
-COPY --from=build  --chown=nginx /app/.retype /usr/share/nginx/html
+COPY --from=build  /app/.retype /usr/share/nginx/html
+RUN mkdir -p /var/cache/nginx/client_temp \
+    && mkdir -p /var/cache/nginx/proxy_temp \
+    && mkdir -p /var/cache/nginx/fastcgi_tmp \
+    && mkdir -p /var/cache/nginx/uwsgi_temp \
+    && mkdir -p /var/cache/nginx/scgi_temp \
+    && chown -R nginx:nginx /var/cache/nginx/ \
+    && chmod -R 777 /var/cache/nginx/
+
+EXPOSE 80
