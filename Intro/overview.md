@@ -1,6 +1,6 @@
 ---
 order: 92
-icon: intro
+icon: rocket
 label: intro
 ---
 

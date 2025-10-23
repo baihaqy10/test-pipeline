@@ -1,7 +1,7 @@
 ---
 order: 91
 icon: book
-label handbook
+label: book
 ---
 
 # HANDBOOK
