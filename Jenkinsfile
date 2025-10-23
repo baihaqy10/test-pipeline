@@ -6,7 +6,7 @@ pipeline {
         SERVICE_NAME = "first-service"
         API_OCP = "https://api.cluster-f4k2h.dynamic.redhatworkshops.io:6443"
         OCP_REG = "image-registry.openshift-image-registry.svc:5000"
-        OCP_TOKEN = "sha256~6dJrlfx457lmwTVVZtxxe3SmGWdjumyoMNk1O4d1CDQ"
+        OCP_TOKEN = "sha256~6dJrIfx457lmwTVVZtxxe3SmGWdjumyoMNk1O4d1CDQ"
         HELM_VERSION = "v3.15.4"
     }
     
