@@ -5,9 +5,9 @@ pipeline {
         PROJECT_NAME = "first-project"
         SERVICE_NAME = "first-service"
         OCP_PASSWORD = credentials('admin-cres')
-        API_OCP = "https://api.cluster-5l9jh.dynamic.redhatworkshops.io:6443"
+        API_OCP = "https://api.cluster-f4k2h.dynamic.redhatworkshops.io:6443"
         OCP_REG = "image-registry.openshift-image-registry.svc:5000"
-        OCP_TOKEN = "sha256~HqImevy5ttC5j5wJYzX6q49NrDArIRJ9E1iv4Akey5s"
+        OCP_TOKEN = "sha256~6dJrlfx457lmwTVVZtxxe3SmGWdjumyoMNk1O4d1CDQ"
         HELM_VERSION = "v3.15.4"
     }
     

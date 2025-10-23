@@ -6,15 +6,13 @@
   "scripts": {
     "re-init": "retype innit",
     "re-build": "retype build",
-    "re-watch": "retype watch"
+    "re-watch": "retype watch",
+    "re-run": "retype serve"
   },
   "keywords": [],
   "author": "bay",
   "license": "ISC",
   "devDependencies": {
     "retypeapp": "^3.6.0"
-  },
-  "dependencies": {
-    "retype": "^0.2.0"
   }
 }
