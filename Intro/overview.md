@@ -6,9 +6,9 @@ label: intro
 
 # OVERVIEW
 
-'''sh
+```sh
 ~$ systemctl status service
-'''
+```
 
 ![Kocheng pp lintang](/intro/assets/lintang.jpg)
 
