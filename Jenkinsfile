@@ -17,7 +17,7 @@ pipeline {
             }
         }
 
-        stage('login') {
+        stage('login ocp') {
             steps {
                 sh """
                 oc login ${API_OCP} --token=${OCP_TOKEN} --insecure-skip-tls-verify=true
@@ -38,7 +38,7 @@ pipeline {
             }
         }
 
-        stage('build openshift') {
+        stage('build custom images') {
             steps {
                 sh """
                 oc start-build ${SERVICE_NAME} --from-dir=. --follow -n ${PROJECT_NAME}
@@ -46,7 +46,7 @@ pipeline {
             }
         }
 
-        stage('install helm bogo') {
+        stage('helm config') {
             steps {
                 sh """
                 curl -sSL https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz -o helm.tar.gz
