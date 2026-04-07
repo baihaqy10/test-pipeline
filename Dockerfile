@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/nodejs-14:latest as build
+FROM image-registry.openshift-image-registry.svc:5000/openshift/nodejs:18-ubi9 as build
 
 USER root
 WORKDIR /app
@@ -12,7 +12,7 @@ RUN dnf install -y libicu-devel --nodocs --setopt=install_weak_deps=0 --best \
     && npm install \
     && npm run re-build
 
-FROM nginx:1.24-alpine
+FROM image-registry.openshift-image-registry.svc:5000/openshift/nginx:1.24-ubi9
 
 COPY --from=build  /app/.retype /usr/share/nginx/html
 
