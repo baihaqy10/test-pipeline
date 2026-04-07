@@ -12,11 +12,11 @@ RUN dnf install -y libicu-devel --nodocs --setopt=install_weak_deps=0 --best \
     && npm install \
     && npm run re-build
 
-FROM image-registry.openshift-image-registry.svc:5000/openshift/nginx:1.24-ubi9
+#FROM image-registry.openshift-image-registry.svc:5000/openshift/nginx:1.24-ubi9
 
-COPY --from=build  /app/.retype /usr/share/nginx/html
+#COPY --from=build  /app/.retype /usr/share/nginx/html
 
-RUN rm -f /etc/nginx/conf.d/default.conf
+#RUN rm -f /etc/nginx/conf.d/default.conf
 
 #RUN mkdir -p /var/cache/nginx/client_temp \
 #    && mkdir -p /var/cache/nginx/proxy_temp \
@@ -30,11 +30,25 @@ RUN rm -f /etc/nginx/conf.d/default.conf
 #    && sed -i 's/listen \[::\]:80/listen [::]:8080/' /etc/nginx/conf.d/default.conf \
 #   && sed -i '/^user nginx;/d' /etc/nginx/nginx.conf
 
-RUN mkdir -p /etc/nginx/conf.d 
+#RUN mkdir -p /etc/nginx/conf.d 
 
-COPY --from=build  /app/default.conf /etc/nginx/conf.d/default.conf
-COPY --from=build  /app/nginx.conf /etc/nginx/nginx.conf
+#COPY --from=build  /app/default.conf /etc/nginx/conf.d/default.conf
+#COPY --from=build  /app/nginx.conf /etc/nginx/nginx.conf
 
 #RUN sed -i '/^user nginx;/d' /etc/nginx/nginx.conf
+
+#EXPOSE 8080
+
+
+FROM image-registry.openshift-image-registry.svc:5000/openshift/nginx:1.24-ubi9
+COPY --from=build /app/.retype /usr/share/nginx/html
+COPY --from=build /app/default.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/nginx.conf /etc/nginx/nginx.conf
+
+USER root
+RUN chmod -R g+rwx /var/cache/nginx /var/run /var/log/nginx /etc/nginx && \
+    chgrp -R 0 /var/cache/nginx /var/run /var/log/nginx /etc/nginx
+
+USER 1001
 
 EXPOSE 8080
