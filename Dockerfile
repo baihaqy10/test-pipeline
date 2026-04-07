@@ -18,13 +18,13 @@ COPY --from=build  /app/.retype /usr/share/nginx/html
 
 RUN rm -f /etc/nginx/conf.d/default.conf
 
-RUN mkdir -p /var/cache/nginx/client_temp \
-    && mkdir -p /var/cache/nginx/proxy_temp \
-    && mkdir -p /var/cache/nginx/fastcgi_tmp \
-    && mkdir -p /var/cache/nginx/uwsgi_temp \
-    && mkdir -p /var/cache/nginx/scgi_temp \
-    && chown -R nginx:nginx /var/cache/nginx/ \
-    && chmod -R 777 /var/cache/nginx/
+#RUN mkdir -p /var/cache/nginx/client_temp \
+#    && mkdir -p /var/cache/nginx/proxy_temp \
+#    && mkdir -p /var/cache/nginx/fastcgi_tmp \
+#    && mkdir -p /var/cache/nginx/uwsgi_temp \
+#    && mkdir -p /var/cache/nginx/scgi_temp \
+#    && chown -R nginx:nginx /var/cache/nginx/ \
+#    && chmod -R 777 /var/cache/nginx/
 
 #RUN sed -i 's/listen    80;/listen      8080;/' /etc/nginx/nginx.conf \
 #    && sed -i 's/listen \[::\]:80/listen [::]:8080/' /etc/nginx/conf.d/default.conf \
