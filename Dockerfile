@@ -46,6 +46,14 @@ COPY --from=build /app/default.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/nginx.conf /etc/nginx/nginx.conf
 
 USER root
+RUN mkdir -p /var/cache/nginx/client_temp \
+    && mkdir -p /var/cache/nginx/proxy_temp \
+    && mkdir -p /var/cache/nginx/fastcgi_tmp \
+    && mkdir -p /var/cache/nginx/uwsgi_temp \
+    && mkdir -p /var/cache/nginx/scgi_temp \
+    && chown -R nginx:nginx /var/cache/nginx/ \
+    && chmod -R 777 /var/cache/nginx/
+
 RUN chmod -R g+rwx /var/cache/nginx /var/run /var/log/nginx /etc/nginx && \
     chgrp -R 0 /var/cache/nginx /var/run /var/log/nginx /etc/nginx
 
